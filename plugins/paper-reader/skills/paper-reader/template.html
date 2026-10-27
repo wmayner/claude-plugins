@@ -1,0 +1,352 @@
+<meta charset="utf-8">
+<title>{{TITLE}}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>/*{{KATEX_CSS}}*/</style>
+<style>
+/* Paper reader shell. Layout: sticky contents rail on the left; text held to a ~66-character measure;
+   figures, tables and display equations take the full content column. Fill the {{…}} slots from a converter. */
+:root {
+  --bg: #fafaf8;
+  --surface: #f1f1ee;
+  --fg: #1d1f22;
+  --muted: #62666d;
+  --caption: #3e434a;
+  --rule: #dcddd9;
+  --accent: #2d5f8a;
+  --plate: #ffffff;
+  /* dark mode: line art is inverted (white -> page dark, black -> light text, hues kept); colour figures are dimmed */
+  --fig-line: none;
+  --fig-color: none;
+  --fig-cursor: auto;
+  --serif: "Source Serif 4", Charter, Georgia, serif;
+  --sans: "IBM Plex Sans", -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  /* reading fonts the viewer can pick between; Atkinson Hyperlegible by default */
+  --f-sans: "Source Sans 3", "IBM Plex Sans", -apple-system, sans-serif;
+  --f-hyper: "Atkinson Hyperlegible Next", "Atkinson Hyperlegible", "Source Sans 3", sans-serif;
+  --body-font: var(--f-hyper);
+  --body-size: 1.125rem;
+  --leading: 1.5;
+  --chars: 66;
+  /* ~0.5em average character width, so chars × size / 2 approximates characters per line */
+  --measure: calc(var(--chars) * var(--body-size) * 0.5);
+  --wide: 68rem;
+  --rail: 15.5rem;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #17191c; --surface: #1f2226; --fg: #e3e4e2; --muted: #9a9ea5; --rule: #33373c;
+  --accent: #8cb8de; --plate: #f4f4f1; --caption: #c3c6ca;
+  --fig-line: invert(0.9) hue-rotate(180deg); --fig-color: brightness(0.85); --fig-cursor: pointer;
+  color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #17191c; --surface: #1f2226; --fg: #e3e4e2; --muted: #9a9ea5; --rule: #33373c;
+  --accent: #8cb8de; --plate: #f4f4f1; --caption: #c3c6ca;
+  --fig-line: invert(0.9) hue-rotate(180deg); --fig-color: brightness(0.85); --fig-cursor: pointer;
+  color-scheme: dark }
+
+html { scroll-padding-top: 1.5rem; }
+html, body { overflow-x: clip; }
+:root[data-font="sans"] { --body-font: var(--f-sans); }
+:root[data-font="serif"] { --body-font: var(--serif); --leading: 1.55; }
+:root[data-size="1"] { --body-size: 1rem; } :root[data-size="2"] { --body-size: 1.0625rem; }
+:root[data-size="4"] { --body-size: 1.1875rem; } :root[data-size="5"] { --body-size: 1.25rem; }
+:root[data-width="narrow"] { --chars: 58; } :root[data-width="wide"] { --chars: 76; }
+body { background: var(--bg); color: var(--fg); font: 400 var(--body-size)/var(--leading) var(--body-font);
+  font-optical-sizing: auto; -webkit-font-smoothing: antialiased; }
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 0.15em; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.page { display: grid; grid-template-columns: var(--rail) minmax(0, 1fr); gap: 3rem;
+  max-width: calc(var(--rail) + 3rem + var(--wide)); margin: 0 auto; padding-inline: 1.5rem; }
+main { min-width: 0; padding-block: 3.5rem 6rem; container-type: inline-size;
+  /* the text column is centred in main; --offset is the gap from main's left edge to the text's left edge */
+  --offset: max(0px, calc((100cqi - var(--measure)) / 2)); }
+/* running text keeps the reading measure; figures, tables and equation blocks do not */
+header.title, .article :is(p, ul, ol, dl, h2, h3, h4, h5, h6, blockquote, pre, .abstract):not(figure *, table *, li *, blockquote *, .abstract *) { max-width: var(--measure); margin-inline: auto; }
+
+/* ---------- title block */
+header.title { margin-bottom: 3rem; }
+header.title .eyebrow { font: 500 0.75rem/1 var(--sans); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0 0 1rem; }
+header.title h1 { font: 600 2.4rem/1.14 var(--serif); letter-spacing: -0.015em; margin: 0 0 1.25rem; text-wrap: balance; }
+header.title .authors { font: 400 1rem/1.6 var(--sans); margin: 0 0 0.5rem; }
+header.title .affil { font: 400 0.82rem/1.55 var(--sans); color: var(--muted); margin: 0 0 0.25rem; }
+header.title sup { font-size: 0.7em; color: var(--muted); }
+.abstract { margin: 0 0 2.5rem; padding: 1.1rem 1.3rem; background: var(--surface); border-radius: 8px; }
+.abstract > :last-child { margin-bottom: 0; }
+.abstract .label { display: block; font: 600 0.7rem/1 var(--sans); letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.7rem; }
+
+/* ---------- prose */
+h2, h3, h4, h5 { font-family: var(--serif); text-wrap: balance; scroll-margin-top: 1.5rem; }
+h2 { font: 600 1.75rem/1.22 var(--serif); margin: 4rem 0 1rem; padding-top: 1.75rem; border-top: 1px solid var(--rule); letter-spacing: -0.01em; }
+h3 { font: 600 1.28rem/1.3 var(--serif); margin: 2.6rem 0 0.7rem; }
+h4 { font: 600 1.05rem/1.4 var(--sans); margin: 2rem 0 0.5rem; }
+h5, h6 { font: 600 1rem/1.4 var(--sans); margin: 1.6rem 0 0.4rem; }
+.section-number { font-family: var(--sans); font-weight: 500; color: var(--muted); font-size: 0.8em; margin-right: 0.35em; }
+p, ul, ol, dl { margin: 0 0 1.1rem; }
+li { margin-bottom: 0.35rem; }
+li > p { margin-bottom: 0.4rem; }
+strong, b { font-weight: 650; }
+code { font: 400 0.84em/1 var(--mono); background: var(--surface); padding: 0.12em 0.32em; border-radius: 3px; }
+pre { overflow-x: auto; background: var(--surface); padding: 1rem; border-radius: 6px; font-size: 0.85rem; }
+pre code { background: none; padding: 0; }
+blockquote { margin: 1.5rem 0; padding: 0.9rem 1.2rem; background: var(--surface); border-radius: 6px; }
+hr { border: 0; border-top: 1px solid var(--rule); margin: 2.5rem 0; }
+
+/* tables */
+.article table:not(.eq) { border-collapse: collapse; font: 400 0.88rem/1.45 var(--sans); font-variant-numeric: tabular-nums; }
+.article table:not(.eq) :is(th, td) { padding: 0.4rem 0.75rem; border-bottom: 1px solid var(--rule); text-align: left; vertical-align: top; }
+.table-scroll { overflow-x: auto; max-width: 100%; }
+.article table:not(.eq) { margin-inline: auto; }  /* tables sit centred under the text column */
+
+/* math: KaTeX; display equations are centred on the text axis and may use the full content column */
+.katex { font-size: 1.04em; }
+.katex-display { overflow-x: auto; overflow-y: hidden; padding: 0.3rem 0; margin: 0; }
+.katex-display > .katex { text-align: center; }
+/* display equations inside paragraphs span the content column, centred on the same axis as the text */
+.article p .katex-display:not(li *) { width: 100cqi; max-width: 100cqi; margin-left: calc(-1 * var(--offset)); }
+table.eq { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+table.eq td { padding: 0.15rem 0; vertical-align: middle; border: 0; }
+table.eq td.eq-no { width: 1%; padding-left: 1rem; white-space: nowrap; text-align: right; font: 400 0.85rem var(--sans); color: var(--muted); }
+math { font-size: 1.05em; }
+
+/* figures */
+figure { margin: 2.25rem 0; }
+/* figures fill the content column; --ar (width/height, set by the converter) caps tall ones at 70% of the window height */
+figure img, figure object, figure svg { display: block; width: min(100%, calc(70vh * var(--ar, 100))); max-width: 100%; height: auto; margin: 0 auto; background: var(--plate); border-radius: 4px; }
+.nowrap { white-space: nowrap; }
+img[data-tone="line"] { background: #fff; filter: var(--fig-line); }
+img[data-tone="color"] { filter: var(--fig-color); }
+img[data-tone].orig { filter: none; }
+img[data-tone] { cursor: var(--fig-cursor); }
+figure figure { margin: 0; }
+.subfigures { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; align-items: flex-end; }
+.subfigures > figure { flex: 1 1 14rem; min-width: 0; }
+figcaption { font: 400 0.92rem/1.55 var(--body-font); color: var(--caption); max-width: var(--measure); margin: 0.75rem auto 0; }
+figcaption .fig-label { color: var(--fg); font-weight: 650; }
+
+/* citations, footnotes, cross-references */
+sup { line-height: 0; }
+.fn a, .cite a { text-decoration: none; }
+.fn { font: 500 0.72em/1 var(--sans); }
+a.xref { text-decoration: none; border-bottom: 1px solid color-mix(in srgb, var(--accent) 40%, transparent); }
+.pop { position: fixed; z-index: 50; max-width: min(34rem, calc(100vw - 2rem)); max-height: min(28rem, 70vh); overflow: auto;
+  padding: 0.8rem 1rem; font: 400 0.86rem/1.5 var(--sans); color: var(--fg); background: var(--bg);
+  border: 1px solid var(--rule); border-radius: 8px; box-shadow: 0 8px 28px rgb(0 0 0 / 0.18); }
+.pop > :last-child { margin-bottom: 0; }
+.pop figure { margin: 0; } .pop figcaption { font-size: 0.82rem; }
+.pop .jump { display: block; margin-top: 0.6rem; font-size: 0.78rem; }
+
+/* footnotes + bibliography */
+.endnotes { max-width: var(--measure); margin: 4rem auto 0; font: 400 0.88rem/1.5 var(--sans); }
+.endnotes h2 { font-size: 1.28rem; }
+.endnotes ol { padding-left: 1.6rem; }
+.endnotes li { margin-bottom: 0.7rem; color: var(--muted); }
+.endnotes li :is(b, strong, .title) { color: var(--fg); font-weight: 500; }
+.endnotes li:target { background: color-mix(in srgb, var(--accent) 12%, transparent); }
+
+/* ---------- contents rail */
+nav.toc { position: sticky; top: env(safe-area-inset-top, 0px); align-self: start; max-height: 100vh; overflow-y: auto;
+  padding-block: 3.5rem 2rem; padding-right: 0.75rem; font: 400 0.8rem/1.4 var(--sans);
+  scrollbar-width: thin; scrollbar-color: transparent transparent; }
+/* the rail scrolls when it is taller than the window; its thin scrollbar always takes the same space
+   (so nothing reflows) but is only coloured in while the pointer is over the rail */
+nav.toc:hover { scrollbar-color: var(--rule) transparent; }
+nav.toc .toc-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.9rem; }
+nav.toc .label { font: 600 0.7rem/1 var(--sans); letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+.toc-list, .toc-sub { list-style: none; margin: 0; padding: 0; }
+.toc-list > li { margin: 0 0 0.15rem; }
+.toc-list a { display: block; color: var(--muted); text-decoration: none; padding: 0.22rem 0.6rem; border-left: 2px solid transparent; border-radius: 0 4px 4px 0; }
+.toc-list a:hover { color: var(--fg); background: var(--surface); }
+.toc-list a.active { color: var(--fg); border-left-color: var(--accent); font-weight: 500; }
+.toc-list > li > a { color: var(--fg); opacity: 0.85; }
+.toc-sub { display: none; padding-left: 0.75rem; margin-bottom: 0.4rem; }
+.toc-group.open > .toc-sub { display: block; }
+.toc-list > li:not(.toc-appendix) + li.toc-appendix { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--rule); }
+.toc-tools { display: flex; gap: 0.4rem; }
+.toc-tools button, .mobile-bar button { font: 500 0.75rem/1 var(--sans); color: var(--muted); background: none; border: 1px solid var(--rule); border-radius: 5px; padding: 0.35rem 0.55rem; cursor: pointer; }
+.toc-tools button:hover { color: var(--fg); }
+.progress { height: 2px; background: var(--rule); margin-bottom: 1rem; border-radius: 1px; overflow: hidden; }
+.progress > span { display: block; height: 100%; width: 0; background: var(--accent); }
+
+.mobile-bar, .close-only { display: none; }
+/* collapsible contents rail (wide screens): hidden, the text recentres in the full width */
+.rail-show { display: none; position: fixed; top: calc(env(safe-area-inset-top, 0px) + 1rem); left: 1rem; z-index: 30; gap: 0.4rem; }
+.rail-show button { font: 500 0.75rem/1 var(--sans); color: var(--muted); background: var(--bg); border: 1px solid var(--rule); border-radius: 5px; padding: 0.4rem 0.6rem; cursor: pointer; }
+.rail-show button:hover, #rail-hide:hover { color: var(--fg); }
+:root[data-rail="hidden"] .page { grid-template-columns: minmax(0, 1fr); }
+:root[data-rail="hidden"] nav.toc { display: none; }
+:root[data-rail="hidden"] .rail-show { display: flex; }
+
+@media (max-width: 1060px) {
+  .page { grid-template-columns: minmax(0, 1fr); gap: 0; padding-inline: 1rem; }
+  main { padding-top: 1.5rem; }
+  .mobile-bar { display: flex; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 30; justify-content: space-between; align-items: center;
+    padding: 0.6rem 1rem; background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--rule);
+    font: 500 0.8rem/1.2 var(--sans); color: var(--muted); }
+  .mobile-bar .current { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; margin-right: 0.75rem; }
+  nav.toc { display: none; position: fixed; inset: 0; z-index: 40; max-height: none; background: var(--bg); padding: 1.5rem 1.25rem calc(2rem + env(safe-area-inset-bottom, 0px)); font-size: 0.95rem; }
+  nav.toc.open { display: block; }
+  .close-only { display: inline-block; }
+  .rail-show, #rail-hide { display: none !important; }
+  :root[data-rail="hidden"] nav.toc.open { display: block; }
+  header.title h1 { font-size: 1.9rem; }
+}
+#reader { margin: 4rem 1.25rem auto auto; padding: 1.1rem 1.2rem; width: min(22rem, calc(100vw - 2.5rem)); background: var(--bg); color: var(--fg);
+  border: 1px solid var(--rule); border-radius: 10px; box-shadow: 0 12px 36px rgb(0 0 0 / 0.18); font: 400 0.85rem/1.4 var(--sans); }
+#reader::backdrop { background: transparent; }
+#reader .opt { display: grid; gap: 0.4rem; margin-bottom: 0.9rem; }
+#reader .label { font: 600 0.68rem/1 var(--sans); letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+#reader .seg { display: flex; border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; }
+#reader .seg button { flex: 1; min-width: 0; padding: 0.45rem 0.3rem; font-size: 0.85rem; color: var(--fg); background: none; border: 0; border-left: 1px solid var(--rule); cursor: pointer; }
+#reader .seg button:first-child { border-left: 0; }
+#reader .seg button[aria-pressed="true"] { background: var(--accent); color: var(--bg); }
+#reader .hint { margin: 0; color: var(--muted); font-size: 0.78rem; }
+.bar-tools { display: flex; gap: 0.4rem; }
+/*{{EXTRA_CSS}}*/
+</style>
+
+<div class="mobile-bar"><span class="current" id="mobile-current">Contents</span><span class="bar-tools"><button type="button" popovertarget="reader" aria-label="Reading settings">Aa</button><button type="button" id="toc-open">Contents</button></span></div>
+<div class="rail-show"><button type="button" id="rail-show">Contents</button><button type="button" popovertarget="reader" aria-label="Reading settings">Aa</button></div>
+<div id="reader" popover aria-label="Reading settings">
+  <div class="opt"><span class="label">Font</span><div class="seg" data-key="font">
+    <button type="button" data-v="sans" style="font-family:var(--f-sans)">Sans</button>
+    <button type="button" data-v="" style="font-family:var(--f-hyper)">Hyperlegible</button>
+    <button type="button" data-v="serif" style="font-family:var(--serif)">Serif</button></div></div>
+  <div class="opt"><span class="label">Size</span><div class="seg" data-key="size">
+    <button type="button" data-v="1">16</button><button type="button" data-v="2">17</button><button type="button" data-v="">18</button><button type="button" data-v="4">19</button><button type="button" data-v="5">20</button></div></div>
+  <div class="opt"><span class="label">Line length</span><div class="seg" data-key="width">
+    <button type="button" data-v="narrow">Narrow</button><button type="button" data-v="">Medium</button><button type="button" data-v="wide">Wide</button></div></div>
+  <div class="opt"><span class="label">Theme</span><div class="seg" data-key="theme">
+    <button type="button" data-v="">Auto</button><button type="button" data-v="light">Light</button><button type="button" data-v="dark">Dark</button></div></div>
+  <p class="hint">Saved in this browser. Try each font on a few paragraphs; the best one differs from person to person.</p>
+</div>
+<div class="page">
+  <nav class="toc" id="toc" aria-label="Contents">
+    <div class="toc-head"><span class="label">Contents</span>
+      <div class="toc-tools"><button type="button" popovertarget="reader" title="Reading settings">Aa</button><button type="button" id="rail-hide" title="Hide contents">Hide</button><button type="button" id="toc-close" class="close-only">Close</button></div></div>
+    <div class="progress"><span id="progress"></span></div>
+    {{TOC}}
+  </nav>
+  <main>
+    <header class="title">
+      <p class="eyebrow">{{EYEBROW}}</p>
+      <h1>{{TITLE}}</h1>
+      {{BYLINE}}
+    </header>
+    <article class="article">{{BODY}}</article>
+    {{ENDNOTES}}
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.js"></script>
+<!--{{EXTRA_JS}}-->
+<script>
+(function () {
+  var store = { get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+                set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+  var root = document.documentElement;
+
+  // math: elements carrying their TeX in data-tex render with KaTeX; on a parse error the original
+  // markup inside them (usually MathML) stays, which browsers render natively
+  var macros = { '\\mathbbm': '\\mathbb', '\\bm': '\\boldsymbol' };
+  document.querySelectorAll('[data-tex]').forEach(function (el) {
+    try { el.innerHTML = katex.renderToString(el.dataset.tex, { displayMode: el.dataset.display === '1', throwOnError: true, strict: 'ignore', macros: macros }); }
+    catch (e) { el.classList.add('tex-fallback'); }
+  });
+
+  // figures: in dark mode a click switches between the adapted and original colours, remembered per image
+  var dark = function () { return root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches; };
+  var origs = {}; try { origs = JSON.parse(store.get('fig-orig') || '{}'); } catch (e) {}
+  document.querySelectorAll('img[data-tone]').forEach(function (img) {
+    var key = img.getAttribute('src');
+    if (origs[key]) img.classList.add('orig');
+    img.title = 'In dark mode, click to switch between adapted and original colours';
+    img.addEventListener('click', function () {
+      if (!dark()) return;
+      img.classList.toggle('orig');
+      if (img.classList.contains('orig')) origs[key] = 1; else delete origs[key];
+      store.set('fig-orig', JSON.stringify(origs));
+    });
+  });
+
+  // reading settings: font, size, line length, theme; stored per viewer as attributes on <html>
+  function apply(key, v) {
+    if (v) root.setAttribute('data-' + key, v); else root.removeAttribute('data-' + key);
+    document.querySelectorAll('#reader .seg[data-key="' + key + '"] button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.v === v)); });
+  }
+  ['font', 'size', 'width', 'theme'].forEach(function (k) { apply(k, store.get('read-' + k) || ''); });
+  document.getElementById('reader').addEventListener('click', function (e) {
+    var b = e.target.closest('.seg button'); if (!b) return;
+    var k = b.parentElement.dataset.key; apply(k, b.dataset.v); store.set('read-' + k, b.dataset.v);
+  });
+
+  // popovers: in-page links to anything marked .poppable (references, footnotes, figures, tables,
+  // equations) preview it on hover; on touch screens the first tap previews, the "Go to" link navigates
+  var pop = document.createElement('div'); pop.className = 'pop'; pop.hidden = true; document.body.appendChild(pop);
+  var coarse = matchMedia('(pointer: coarse)').matches, hideT = null, owner = null;
+  function target(a) {
+    var h = a.getAttribute('href'); if (!h || h[0] !== '#' || h.length < 2) return null;
+    var t = document.getElementById(decodeURIComponent(h.slice(1)));
+    return t && t.classList.contains('poppable') ? t : null;
+  }
+  function show(a, t) {
+    clearTimeout(hideT); owner = a;
+    var c = t.cloneNode(true); c.removeAttribute('id'); c.querySelectorAll('[id]').forEach(function (n) { n.removeAttribute('id'); });
+    pop.replaceChildren(c);
+    var j = document.createElement('a'); j.className = 'jump'; j.href = a.getAttribute('href'); j.textContent = 'Go to ↓'; pop.appendChild(j);
+    pop.hidden = false;
+    var r = a.getBoundingClientRect(), w = pop.offsetWidth, h = pop.offsetHeight;
+    pop.style.left = Math.max(8, Math.min(r.left, innerWidth - w - 8)) + 'px';
+    pop.style.top = (r.bottom + 8 + h < innerHeight ? r.bottom + 8 : Math.max(8, r.top - h - 8)) + 'px';
+  }
+  function hideSoon() { clearTimeout(hideT); hideT = setTimeout(function () { pop.hidden = true; owner = null; }, 220); }
+  var main = document.querySelector('main');
+  main.addEventListener('mouseover', function (e) { var a = e.target.closest('a[href^="#"]'); var t = a && target(a); if (t && !coarse) show(a, t); });
+  main.addEventListener('mouseout', function (e) { var a = e.target.closest('a[href^="#"]'); if (a && a === owner) hideSoon(); });
+  pop.addEventListener('mouseenter', function () { clearTimeout(hideT); });
+  pop.addEventListener('mouseleave', hideSoon);
+  main.addEventListener('click', function (e) {
+    var a = e.target.closest('a[href^="#"]'); var t = a && target(a);
+    if (t && coarse && owner !== a) { e.preventDefault(); show(a, t); }
+  });
+  pop.addEventListener('click', function (e) { if (e.target.closest('a')) pop.hidden = true; });
+  document.addEventListener('click', function (e) { if (!pop.hidden && !pop.contains(e.target) && !e.target.closest('a[href^="#"]')) pop.hidden = true; });
+  addEventListener('scroll', function () { if (!pop.hidden && !coarse) pop.hidden = true; }, { passive: true });
+
+  // contents rail: hide/show on wide screens, remembered
+  function rail(v) { if (v) root.dataset.rail = v; else delete root.dataset.rail; store.set('rail', v); }
+  if (store.get('rail') === 'hidden') root.dataset.rail = 'hidden';
+  document.getElementById('rail-hide').addEventListener('click', function () { rail('hidden'); });
+  document.getElementById('rail-show').addEventListener('click', function () { rail(''); });
+
+  // contents: scroll spy, expand the current section, mobile drawer
+  var toc = document.getElementById('toc');
+  var links = Array.prototype.slice.call(toc.querySelectorAll('a[href^="#"]'));
+  var targets = links.map(function (a) { return document.getElementById(decodeURIComponent(a.getAttribute('href').slice(1))); });
+  var current = document.getElementById('mobile-current');
+  var bar = document.getElementById('progress');
+  var ticking = false;
+  function spy() {
+    ticking = false;
+    var y = window.scrollY + 120, idx = -1;
+    for (var i = 0; i < targets.length; i++) if (targets[i] && targets[i].getBoundingClientRect().top + window.scrollY <= y) idx = i;
+    links.forEach(function (a, i) { a.classList.toggle('active', i === idx); });
+    toc.querySelectorAll('.toc-group').forEach(function (g) { g.classList.toggle('open', idx >= 0 && g.contains(links[idx])); });
+    if (idx >= 0) current.textContent = links[idx].textContent;
+    var h = document.documentElement.scrollHeight - innerHeight;
+    bar.style.width = (h > 0 ? Math.min(100, 100 * scrollY / h) : 0) + '%';
+  }
+  addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(spy); } }, { passive: true });
+  spy();
+  document.getElementById('toc-open').addEventListener('click', function () { toc.classList.add('open'); });
+  document.getElementById('toc-close').addEventListener('click', function () { toc.classList.remove('open'); });
+  toc.addEventListener('click', function (e) { if (e.target.closest('a')) toc.classList.remove('open'); });
+
+  // remember reading position
+  var pos = parseInt(store.get('scroll') || '0', 10);
+  if (pos > 0 && !location.hash) addEventListener('load', function () { scrollTo(0, pos); });
+  setInterval(function () { store.set('scroll', String(Math.round(scrollY))); }, 2000);
+})();
+</script>

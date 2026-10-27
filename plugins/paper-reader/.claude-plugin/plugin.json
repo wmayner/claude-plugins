@@ -1,0 +1,7 @@
+{
+  "name": "paper-reader",
+  "version": "0.1.0",
+  "description": "Turns an arXiv paper or research blog post into a private claude.ai artifact laid out for reading: comfortable line length, popovers for citations and footnotes, a contents rail, and font, size and theme settings.",
+  "author": { "name": "Will Mayner" },
+  "license": "MIT"
+}
