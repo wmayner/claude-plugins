@@ -1,0 +1,32 @@
+{
+  "name": "wmayner",
+  "owner": { "name": "Will Mayner" },
+  "description": "Will Mayner's Claude plugins.",
+  "plugins": [
+    {
+      "name": "git-workflow",
+      "source": "./plugins/git-workflow",
+      "description": "Skills for committing, splitting changes into logical commits, working in a git worktree, and writing towncrier news fragments."
+    },
+    {
+      "name": "vastai",
+      "source": "./plugins/vastai",
+      "description": "How to work with remote GPU instances on Vast.ai."
+    },
+    {
+      "name": "prepare-compact",
+      "source": { "source": "github", "repo": "wmayner/claude-prepare-compact" },
+      "description": "Before compacting, Claude writes a handoff note for its post-compaction self; a SessionStart hook loads it right after the summary."
+    },
+    {
+      "name": "glance",
+      "source": { "source": "github", "repo": "wmayner/claude-glance" },
+      "description": "Shows what Claude is doing and why above the prompt, during long turns and after they end."
+    },
+    {
+      "name": "iit-expert",
+      "source": { "source": "github", "repo": "wmayner/iit-expert-plugin" },
+      "description": "Answers questions about Integrated Information Theory from its primary literature."
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "name": "vastai",
+  "version": "0.1.0",
+  "description": "How to work with remote GPU instances on Vast.ai.",
+  "author": { "name": "Will Mayner" },
+  "license": "MIT"
+}

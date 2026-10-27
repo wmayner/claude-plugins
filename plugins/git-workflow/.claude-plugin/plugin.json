@@ -1,0 +1,7 @@
+{
+  "name": "git-workflow",
+  "version": "0.1.0",
+  "description": "Skills for committing, splitting changes into logical commits, working in a git worktree, and writing towncrier news fragments.",
+  "author": { "name": "Will Mayner" },
+  "license": "MIT"
+}
