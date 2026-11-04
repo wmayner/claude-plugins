@@ -1,6 +1,6 @@
 {
   "name": "todos",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Keeps the user's to-dos in one Workflowy node: any session adds deadlines and follow-ups as they come up, and can review what is due.",
   "author": { "name": "Will Mayner" },
   "license": "MIT"
