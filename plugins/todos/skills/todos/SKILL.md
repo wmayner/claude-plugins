@@ -1,6 +1,6 @@
 ---
 name: todos
-description: Use when the user asks to add, track, review or tick off a to-do, or asks what is due. The user's to-dos live in Workflowy, which they often call "wf" ("add that to wf", "what's in wf?").
+description: Use when the user asks to add, track, review or tick off a to-do, or asks what is due; and when something of the kind that goes on a calendar or planner comes up (a deadline, an application, a trip, an appointment, a dated commitment to someone), to offer adding it. The user's to-dos live in Workflowy, which they often call "wf" ("add that to wf", "what's in wf?").
 ---
 
 # To-dos in Workflowy
@@ -10,6 +10,8 @@ The user keeps every to-do in one place: a top-level Workflowy bullet named `Tas
 ## Adding
 
 Add a to-do only when the user asks for one. Then confirm in one line, for example "Added to Tasks: draft grant report (Nov 5)."
+
+**Offering.** When the conversation surfaces something the user would put on a calendar or planner, end your reply with a one-line offer, for example "Add to wf: submit travel reimbursement (due nov 20)?" It qualifies if it is something the user has to do, happens outside the current session's work, and is either dated (a deadline, an application, an appointment to make, a trip to arrange, a dated promise to someone) or a substantial undertaking (a talk to prepare, a paper to write). Phrase it as the action: `prepare lab meeting talk (nov 20)`, not `lab meeting talk`. An event that is already arranged, such as a booked flight or a scheduled meeting, belongs on a calendar, not in `Tasks`; offer nothing for it. It does not qualify if it is a step of the task at hand, a code or experiment follow-up, something the session itself will do, or a small chore. Offer each item once; if the user doesn't take it up, drop it. Add nothing without a yes.
 
 Before adding, read `Tasks`. If an open to-do already covers the same thing, add nothing; if the new information changes it (a new date, a new source), edit that item and say so.
 
