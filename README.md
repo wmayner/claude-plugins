@@ -10,8 +10,9 @@ My plugins for Claude, in one marketplace.
 | [`prepare-compact`](https://github.com/wmayner/claude-prepare-compact) | Before you compact, Claude writes a handoff note that is loaded right after the summary. |
 | [`glance`](https://github.com/wmayner/claude-glance) | Shows what Claude is doing and why, above the prompt. |
 | [`iit-expert`](https://github.com/wmayner/iit-expert-plugin) | Answers questions about Integrated Information Theory from its primary literature. |
+| [`better-figures`](https://github.com/wmayner/better-figures) | Research figures a busy reader understands at a glance: a plan before drawing, a matplotlib house style with a check on save, worked examples, HTML routes for interactive figures, diagrams and summary figures, and illustrated explainers of how code computes something. |
 
-`prepare-compact`, `glance` and `iit-expert` are developed in their own repositories; this marketplace points to them.
+`prepare-compact`, `glance`, `iit-expert` and `better-figures` are developed in their own repositories; this marketplace points to them.
 
 ## Install
 

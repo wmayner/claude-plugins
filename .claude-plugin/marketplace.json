@@ -48,6 +48,14 @@
         "repo": "wmayner/iit-expert-plugin"
       },
       "description": "Answers questions about Integrated Information Theory from its primary literature."
+    },
+    {
+      "name": "better-figures",
+      "source": {
+        "source": "github",
+        "repo": "wmayner/better-figures"
+      },
+      "description": "Research figures a busy reader understands at a glance: one claim per figure, a matplotlib house style with a check on save, worked examples, HTML routes for interactive figures, diagrams and summary figures, and illustrated explainers of how code computes something."
     }
   ]
 }
