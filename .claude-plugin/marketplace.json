@@ -23,7 +23,7 @@
     {
       "name": "todos",
       "source": "./plugins/todos",
-      "description": "Keeps the user's to-dos in one Workflowy node: any session adds deadlines and follow-ups as they come up, and can review what is due."
+      "description": "Keeps the user's to-dos in one Workflowy node: sessions add, review and complete them when the user asks."
     },
     {
       "name": "prepare-compact",

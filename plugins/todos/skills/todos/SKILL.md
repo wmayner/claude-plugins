@@ -1,15 +1,15 @@
 ---
 name: todos
-description: Use when a deadline, a dated commitment, or a follow-up the user owes someone comes up in conversation, even in passing and even when the request is about something else; when the user asks to add, track, review or tick off a to-do; or when asked what is due. The user's to-dos live in Workflowy, which they often call "wf" ("add that to wf", "what's in wf?").
+description: Use when the user asks to add, track, review or tick off a to-do, or asks what is due. The user's to-dos live in Workflowy, which they often call "wf" ("add that to wf", "what's in wf?").
 ---
 
 # To-dos in Workflowy
 
-The user keeps every to-do in one place: a top-level Workflowy bullet named `Tasks`. Any session that notices a to-do adds it there, so nothing is left in a repo file or a chat log. "wf" means Workflowy. When the user says "add that to wf" about something to do, it goes in `Tasks`; when it is a note or a reference rather than a task, ask where in the outline it should go.
+The user keeps every to-do in one place: a top-level Workflowy bullet named `Tasks`. "wf" means Workflowy. When the user says "add that to wf" about something to do, it goes in `Tasks`; when it is a note or a reference rather than a task, ask where in the outline it should go.
 
 ## Adding
 
-If the conversation contains something the user must do by a date, or a follow-up they owe someone, add it to `Tasks` without asking, then say so in one line, for example "Added to Tasks: draft grant report (Nov 5)." Do this alongside whatever else was asked. If it is unclear whether the item is the user's to do (rather than someone else's, or already done), ask in one line instead.
+Add a to-do only when the user asks for one. Then confirm in one line, for example "Added to Tasks: draft grant report (Nov 5)."
 
 Before adding, read `Tasks`. If an open to-do already covers the same thing, add nothing; if the new information changes it (a new date, a new source), edit that item and say so.
 
