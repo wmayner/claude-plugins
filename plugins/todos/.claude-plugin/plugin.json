@@ -1,7 +1,7 @@
 {
   "name": "todos",
-  "version": "0.1.1",
-  "description": "Keeps the user's to-dos in one Workflowy node: any session adds deadlines and follow-ups as they come up, and can review what is due.",
+  "version": "0.2.0",
+  "description": "Keeps the user's to-dos in one Workflowy node, through a remote connector that works from every Claude surface: sessions add deadlines and follow-ups as they come up, and can review what is due.",
   "author": { "name": "Will Mayner" },
   "license": "MIT"
 }
