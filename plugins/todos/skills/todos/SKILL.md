@@ -26,21 +26,23 @@ Each to-do has up to four parts:
 
 The connector also records when each to-do was added. Each of the three dates has its own form:
 
-- the day to act is the item's only Workflowy date tag, so the item shows on that day in Workflowy's calendar and date searches;
+- the day to act is a Workflowy date tag with no time;
 - a hard deadline is text: `(due nov 20)`;
-- the time added is plain text in the item's note, in Pacific time: `added 2026-11-05 21:14`. The connector writes it. Never put it in the text or as a date tag, which would put the item on the calendar on the day it was added.
+- the time added ends the item: the word `added` and a Workflowy date tag with the time, in Pacific time, such as `· added Thu, Nov 5, 2026 at 9:14 PM`. The connector writes it and keeps it when the item is edited; never write it yourself.
 
-Older items have one tag and no note. Leave them as they are; `list_todos` gives their time added from Workflowy's creation time.
+Both date tags put the item in Workflowy's calendar and date searches, so a new to-do also shows on the day it was added. When reading the outline directly, the day to act is the date tag without `added` before it.
+
+Older items have one tag and no `added` stamp. Leave them as they are; `list_todos` gives their time added from Workflowy's creation time.
 
 ## Which route to use
 
 Use the first that is available.
 
-1. **The Workflowy Tasks connector**: tools named `list_todos`, `add_todo`, `update_todo` and `complete_todo` (in Claude Code the names carry a prefix, such as `mcp__claude_ai_Workflowy_Tasks__add_todo`). It works from every Claude surface and only ever touches `Tasks`. `add_todo` takes `text`, `tags` (a list), `act_by` (`YYYY-MM-DD`) and `source`, and writes the note with the time added. `list_todos` returns `todos`, each with its id, text, tags, date, time added and completed state, leaving completed items out unless asked, and `tags_in_use`, every tag in `Tasks` with how many items carry it; it takes a `tag` to list one kind of task. `update_todo` with `tags` replaces all of an item's tags, so pass the full set; with `act_by: null` it removes a date.
+1. **The Workflowy Tasks connector**: tools named `list_todos`, `add_todo`, `update_todo` and `complete_todo` (in Claude Code the names carry a prefix, such as `mcp__claude_ai_Workflowy_Tasks__add_todo`). It works from every Claude surface and only ever touches `Tasks`. `add_todo` takes `text`, `tags` (a list), `act_by` (`YYYY-MM-DD`) and `source`, and ends the item with the time added. `list_todos` returns `todos`, each with its id, text, tags, date, time added and completed state, leaving completed items out unless asked, and `tags_in_use`, every tag in `Tasks` with how many items carry it; it takes a `tag` to list one kind of task. `update_todo` with `tags` replaces all of an item's tags, so pass the full set; with `act_by: null` it removes a date.
 2. **The desktop `workflowy` tools** (`tree_seek`, `tree_patch`; only on a Mac with the Workflowy desktop app open):
    - Find `Tasks`: `tree_seek` from `"root"`, `direction: "downward-deep"`, `max_match_edge_distance_from_start: 1`, `limit: 5`, `truncate_text_at: 50`, filter `text_matches_any: [{pattern: "^Tasks$"}]`.
    - Read it: `tree_seek` from the `Tasks` id, `max_match_edge_distance_from_start: 1`, `limit: 200`, `truncate_text_at: 300`. The output does not mark completed items, so run the same request again with filter `{completed_after: 0}`; the items it returns are the completed ones.
-   - Add: `tree_patch` with `{insert_after: <Tasks id>, inside: true, items: [{name, block_format: "todo", children: [{name: <source>, block_format: "bullets"}]}]}`. Write the tags into the name after the text, and a date after them as `<time startYear="2026" startMonth="11" startDay="17">Nov 17, 2026</time>`. If `tree_patch` takes a note, set it to `added YYYY-MM-DD HH:MM` in Pacific time; if not, leave it out, since Workflowy records when the item was created. Set `block_format` explicitly; an item without one becomes a paragraph.
+   - Add: `tree_patch` with `{insert_after: <Tasks id>, inside: true, items: [{name, block_format: "todo", children: [{name: <source>, block_format: "bullets"}]}]}`. Write the tags into the name after the text, then the day to act as `<time startYear="2026" startMonth="11" startDay="17">Nov 17, 2026</time>`, then ` · added ` and the time now in Pacific time as `<time startYear="2026" startMonth="11" startDay="5" startHour="21" startMinute="14">Thu, Nov 5, 2026 at 9:14 PM</time>`. When editing a name, keep its `added` stamp unchanged at the end. Set `block_format` explicitly; an item without one becomes a paragraph.
    - Edit: `{replace: <id>, name: <new text>}`. Complete: `{complete: <id>}`.
 3. **Tools exist but calls fail**: say so, and fall through to the next case.
 4. **No Workflowy tools**: give the user the text to paste and the day to date it, for example "Add to Tasks: submit travel reimbursement (due nov 20) #admin; date it Nov 17." Say that you couldn't check `Tasks` for an existing item.

@@ -1,6 +1,6 @@
 {
   "name": "todos",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Keeps the user's to-dos in one Workflowy node, through a remote connector that works from every Claude surface: sessions add, review and complete to-dos when the user asks.",
   "author": { "name": "Will Mayner" },
   "license": "MIT"
