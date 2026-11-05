@@ -21,21 +21,29 @@ Each to-do has up to four parts:
 
 1. **Text**: terse lowercase shorthand, the way a person jots a list: a verb, the object, nothing else. Drop articles, background and explanations. Write `apply to coevolution conference`, `change flight home to dec 7`, `email editor re figures`, not `Apply to the Coevolution Conference (Dec 4–6, Bay Area) and move the flight home`.
 2. **Date**, if it has one: the day the user should **act**. A hard deadline that differs from that day goes in the text as `(due nov 20)`. If the user named no day to act, choose one that leaves time for the work, and name it in the confirmation line.
-3. **Tag**: exactly one, for the kind of action, so the user can batch similar tasks without nesting: `#reply` (a message to send or answer), `#people` (calls and plans with people), `#read`, `#write` (essays, applications), `#research` (thinking, experiments), `#admin` (logistics, money, bookings, forms), `#someday` (worth keeping but not now). Use only these.
+3. **Tags**, so the user can batch similar tasks without nesting. First exactly one for the kind of action: `#reply` (a message to send or answer), `#people` (calls and plans with people), `#read`, `#write` (essays, applications), `#research` (thinking, experiments) or `#admin` (logistics, money, bookings, forms). Then add `#ideas` if it is an idea to think over rather than a commitment, and `#someday` if it is worth keeping but not now. So `#reply`, `#research #ideas`, `#write #someday`. Tags are lowercase, one word each. Make a new tag only when none of these says how the user would group the item, such as a project with several to-dos (`#penobscot` was one). Check the tags already in `Tasks` first, reuse one that fits, and never add a synonym of one (`#idea`, `#email`).
 4. **Source**, only when there is one worth opening: the bare link or file path, with no label or commentary.
+
+The connector also records when each to-do was added. Each of the three dates has its own form:
+
+- the day to act is the item's only Workflowy date tag, so the item shows on that day in Workflowy's calendar and date searches;
+- a hard deadline is text: `(due nov 20)`;
+- the time added is plain text in the item's note, in Pacific time: `added 2026-11-05 21:14`. The connector writes it. Never put it in the text or as a date tag, which would put the item on the calendar on the day it was added.
+
+Older items have one tag and no note. Leave them as they are; `list_todos` gives their time added from Workflowy's creation time.
 
 ## Which route to use
 
 Use the first that is available.
 
-1. **The Workflowy Tasks connector**: tools named `list_todos`, `add_todo`, `update_todo` and `complete_todo` (in Claude Code the names carry a prefix, such as `mcp__claude_ai_Workflowy_Tasks__add_todo`). It works from every Claude surface and only ever touches `Tasks`. `add_todo` takes `text`, `tag`, `act_by` (`YYYY-MM-DD`) and `source`. `list_todos` returns each item's id, text, tags, date and completed state, leaving completed items out unless asked, and takes a `tag` to list one kind of task. `update_todo` with `act_by: null` removes a date.
+1. **The Workflowy Tasks connector**: tools named `list_todos`, `add_todo`, `update_todo` and `complete_todo` (in Claude Code the names carry a prefix, such as `mcp__claude_ai_Workflowy_Tasks__add_todo`). It works from every Claude surface and only ever touches `Tasks`. `add_todo` takes `text`, `tags` (a list), `act_by` (`YYYY-MM-DD`) and `source`, and writes the note with the time added. `list_todos` returns `todos`, each with its id, text, tags, date, time added and completed state, leaving completed items out unless asked, and `tags_in_use`, every tag in `Tasks` with how many items carry it; it takes a `tag` to list one kind of task. `update_todo` with `tags` replaces all of an item's tags, so pass the full set; with `act_by: null` it removes a date.
 2. **The desktop `workflowy` tools** (`tree_seek`, `tree_patch`; only on a Mac with the Workflowy desktop app open):
    - Find `Tasks`: `tree_seek` from `"root"`, `direction: "downward-deep"`, `max_match_edge_distance_from_start: 1`, `limit: 5`, `truncate_text_at: 50`, filter `text_matches_any: [{pattern: "^Tasks$"}]`.
    - Read it: `tree_seek` from the `Tasks` id, `max_match_edge_distance_from_start: 1`, `limit: 200`, `truncate_text_at: 300`. The output does not mark completed items, so run the same request again with filter `{completed_after: 0}`; the items it returns are the completed ones.
-   - Add: `tree_patch` with `{insert_after: <Tasks id>, inside: true, items: [{name, block_format: "todo", children: [{name: <source>, block_format: "bullets"}]}]}`. Write the tag into the name after the text, and a date after that as `<time startYear="2026" startMonth="11" startDay="17">Nov 17, 2026</time>`. Set `block_format` explicitly; an item without one becomes a paragraph.
+   - Add: `tree_patch` with `{insert_after: <Tasks id>, inside: true, items: [{name, block_format: "todo", children: [{name: <source>, block_format: "bullets"}]}]}`. Write the tags into the name after the text, and a date after them as `<time startYear="2026" startMonth="11" startDay="17">Nov 17, 2026</time>`. If `tree_patch` takes a note, set it to `added YYYY-MM-DD HH:MM` in Pacific time; if not, leave it out, since Workflowy records when the item was created. Set `block_format` explicitly; an item without one becomes a paragraph.
    - Edit: `{replace: <id>, name: <new text>}`. Complete: `{complete: <id>}`.
 3. **Tools exist but calls fail**: say so, and fall through to the next case.
-4. **No Workflowy tools**: give the user the text to paste and the day to tag, for example "Add to Tasks: submit travel reimbursement (due nov 20) #admin; date it Nov 17." Say that you couldn't check `Tasks` for an existing item.
+4. **No Workflowy tools**: give the user the text to paste and the day to date it, for example "Add to Tasks: submit travel reimbursement (due nov 20) #admin; date it Nov 17." Say that you couldn't check `Tasks` for an existing item.
 
 ## What a session may change
 
